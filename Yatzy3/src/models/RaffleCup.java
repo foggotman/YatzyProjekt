@@ -32,4 +32,8 @@ public class RaffleCup {
     public void setDieValue(int index, Die die) {
             femDice[index] = die; // Set the die to the specific die object
         }
+
+    public void setHold(int dieNumber, boolean isHold) {
+        femDice[dieNumber].setHold(isHold);
     }
+}
