@@ -16,8 +16,6 @@ import models.YatzyResultCalculator;
 public class YatzyGui extends Application {
     RaffleCup dean = new RaffleCup();
     YatzyResultCalculator deanUdregner = new YatzyResultCalculator(dean.getFemDice());
-    Die enkeltTerning = new Die(dean.getDieValue(0));
-
 
     private final Label Terning1 = new Label("0");
     private final Label Terning2 = new Label("0");
@@ -51,15 +49,15 @@ public class YatzyGui extends Application {
     private final TextField sumT = new TextField();
     private final TextField bonusT = new TextField();
 
-    private  final Label etPar = new Label("Et par: ");
-    private  final Label toPar = new Label("To par: ");
-    private  final Label treEns = new Label("Tre ens: ");
-    private  final Label fireEns = new Label("Fire ens: ");
-    private  final Label lilleStraight = new Label("Lille straight: ");
-    private  final Label storStraight = new Label("Store straight: ");
-    private  final Label fuldtHus = new Label("Fuldt hus: ");
-    private  final Label chance = new Label("Chance: ");
-    private  final Label yatzy = new Label("Yatzy: ");
+    private final Label etPar = new Label("Et par: ");
+    private final Label toPar = new Label("To par: ");
+    private final Label treEns = new Label("Tre ens: ");
+    private final Label fireEns = new Label("Fire ens: ");
+    private final Label lilleStraight = new Label("Lille straight: ");
+    private final Label storStraight = new Label("Store straight: ");
+    private final Label fuldtHus = new Label("Fuldt hus: ");
+    private final Label chance = new Label("Chance: ");
+    private final Label yatzy = new Label("Yatzy: ");
     private final TextField etParT = new TextField("0");
     private final TextField toParT = new TextField("0");
     private final TextField treEnsT = new TextField("0");
@@ -69,8 +67,6 @@ public class YatzyGui extends Application {
     private final TextField fuldtHusT = new TextField("0");
     private final TextField chanceT = new TextField("0");
     private final TextField yatzyT = new TextField("0");
-
-
 
 
     @Override
@@ -102,7 +98,11 @@ public class YatzyGui extends Application {
         pane1.add(kasteKnap, 4, 2);
         kasteKnap.setOnAction(event -> this.kastTerninger());
         pane1.add(antalKastTilbage, 1, 2);
-
+        hold1.setOnAction(event -> dean.setHold(0, hold1.isSelected()));
+        hold2.setOnAction(event -> dean.setHold(1, hold2.isSelected()));
+        hold3.setOnAction(event -> dean.setHold(2, hold3.isSelected()));
+        hold4.setOnAction(event -> dean.setHold(3, hold4.isSelected()));
+        hold5.setOnAction(event -> dean.setHold(4, hold5.isSelected()));
         pane1.add(enere, 0, 3);
         pane1.add(toere, 0, 4);
         pane1.add(treere, 0, 5);
@@ -133,7 +133,7 @@ public class YatzyGui extends Application {
         pane1.add(etParT, 1, 11);
         pane1.add(toParT, 1, 12);
         pane1.add(treEnsT, 1, 13);
-        pane1.add(fireEnsT,1 , 14);
+        pane1.add(fireEnsT, 1, 14);
         pane1.add(lilleStraightT, 1, 15);
         pane1.add(storStraightT, 1, 16);
         pane1.add(fuldtHusT, 1, 17);
@@ -143,47 +143,17 @@ public class YatzyGui extends Application {
     }
 
     private void kastTerninger() {
-        if (antalKast > 0) {
-            antalKast--;
-            antalKastTilbage.setText("Antal kast tilbage: " + antalKast);
+        antalKast--;
+        antalKastTilbage.setText("Antal kast tilbage: " + antalKast);
 
-            Die[] currentDice = new Die[5];
-            for (int i = 0; i < 5; i++) {
-                currentDice[i] = new Die(dean.getDieValue(i)); // Assuming getDieValue() returns a Die object
-            }
-            dean.throwDice();
-            deanUdregner.updateSum(dean.getFemDice());
-            if (!hold1.isSelected()) {
-                Terning1.setText(String.valueOf(dean.getDieValue(0))); // Use the int directly
-            } else {
-                dean.setDieValue(0, currentDice[0]);
-                Terning1.setText(String.valueOf(currentDice[0].getEyes())); // Get from stored Die
-            }
-            if (!hold2.isSelected()) {
-                Terning2.setText(String.valueOf(dean.getDieValue(1)));
-            } else {
-                dean.setDieValue(1, currentDice[1]);
-                Terning2.setText(String.valueOf(currentDice[1].getEyes()));
-            }
-            if (!hold3.isSelected()) {
-                Terning3.setText(String.valueOf(dean.getDieValue(2)));
-            } else {
-                dean.setDieValue(2, currentDice[2]);
-                Terning3.setText(String.valueOf(currentDice[2].getEyes()));
-            }
-            if (!hold4.isSelected()) {
-                Terning4.setText(String.valueOf(dean.getDieValue(3)));
-            } else {
-                dean.setDieValue(3, currentDice[3]);
-                Terning4.setText(String.valueOf(currentDice[3].getEyes()));
-            }
-            if (!hold5.isSelected()) {
-                Terning5.setText(String.valueOf(dean.getDieValue(4)));
-            } else {
-                dean.setDieValue(4, currentDice[4]);
-                Terning5.setText(String.valueOf(currentDice[4].getEyes()));
-            }
-        } else if(antalKast == 0){
+        dean.throwDice();
+        deanUdregner.updateSum(dean.getFemDice());
+        Terning1.setText(String.valueOf(dean.getDieValue(0))); // Use the int directly
+        Terning2.setText(String.valueOf(dean.getDieValue(1)));
+        Terning3.setText(String.valueOf(dean.getDieValue(2)));
+        Terning4.setText(String.valueOf(dean.getDieValue(3)));
+        Terning5.setText(String.valueOf(dean.getDieValue(4)));
+        if (antalKast == 0) {
             kasteKnap.setDisable(true);
             etParT.setText("" + deanUdregner.onePairScore());
             toParT.setText("" + deanUdregner.twoPairScore());
@@ -194,9 +164,7 @@ public class YatzyGui extends Application {
             fuldtHusT.setText("" + deanUdregner.fullHouseScore());
             chanceT.setText("" + deanUdregner.chanceScore());
             yatzyT.setText("" + deanUdregner.yatzyScore());
-
         }
-
     }
 
 }
